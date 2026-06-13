@@ -30,12 +30,38 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/register").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/books/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/books/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/books/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/books/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/books/**")
+                        .hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/books/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.PUT, "/api/books/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.DELETE, "/api/books/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/api/reservations")
+                        .hasRole("USER")
+
+                        .requestMatchers(HttpMethod.GET, "/api/reservations/my")
+                        .hasRole("USER")
+
+                        .requestMatchers(HttpMethod.GET, "/api/reservations")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/reservations/*/cancel"
+                        )
+                        .hasAnyRole("USER", "ADMIN")
 
                         .anyRequest().authenticated()
                 );
