@@ -62,3 +62,7 @@ http://localhost:8080/swagger-ui/index.html
 ## Swagger UI
 
 ![Swagger UI](docs/swagger.png)
+
+## Testy
+
+![Wynik Testy](docs/Testy.png)
