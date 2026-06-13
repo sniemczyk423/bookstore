@@ -45,16 +45,18 @@ public class ReservationService {
         User user = findUserByEmail(email);
 
         Book book = bookRepository.findById(request.getBookId())
-                .orElseThrow(() -> new BookNotFoundException(request.getBookId()));
+                .orElseThrow(() ->
+                        new BookNotFoundException(request.getBookId())
+                );
 
         if (book.getAvailableCopies() <= 0) {
-            throw new BookUnavailableException(book.getId());
+            throw new BookUnavailableException(request.getBookId());
         }
 
         boolean alreadyReserved =
                 reservationRepository.existsByUserAndBookIdAndStatus(
                         user,
-                        book.getId(),
+                        request.getBookId(),
                         ReservationStatus.ACTIVE
                 );
 
