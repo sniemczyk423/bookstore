@@ -57,6 +57,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/reservations")
                         .hasRole("ADMIN")
 
+                        .requestMatchers(HttpMethod.GET, "/api/late-fees/**")
+                        .hasAnyRole("USER", "ADMIN")
+
                         .requestMatchers(
                                 HttpMethod.PATCH,
                                 "/api/reservations/*/cancel"
