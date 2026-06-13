@@ -47,3 +47,12 @@ create table reservations (
 
 insert into roles (name) values ('USER');
 insert into roles (name) values ('ADMIN');
+
+insert into users (email, password, first_name, last_name, role_id)
+values (
+           'admin@bookstore.com',
+           '$2a$12$N7TuPg7skg0mwODfikOuj.EmayBfeST4/WnwLgot8GvhTOx0T0gAm',
+           'admin',
+           'user',
+           (select id from roles where name = 'ADMIN')
+       );
