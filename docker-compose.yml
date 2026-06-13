@@ -2,7 +2,6 @@ services:
   postgres:
     image: postgres:16
     container_name: bookstore-postgres
-    restart: always
     environment:
       POSTGRES_DB: bookstore_db
       POSTGRES_USER: bookstore_user
@@ -10,7 +9,28 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - bookstore_postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bookstore_user -d bookstore_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bookstore-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bookstore_db
+      SPRING_DATASOURCE_USERNAME: bookstore_user
+      SPRING_DATASOURCE_PASSWORD: bookstore_password
+    restart: unless-stopped
 
 volumes:
-  bookstore_postgres_data:
+  postgres_data:

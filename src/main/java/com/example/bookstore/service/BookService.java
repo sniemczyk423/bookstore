@@ -75,7 +75,10 @@ public class BookService {
         Book book = findBookById(id);
 
         bookRepository.findByIsbn(request.getIsbn())
-                .filter(existingBook -> !existingBook.getId().equals(id))
+                .filter(existingBook ->
+                        existingBook.getId() == null
+                                || !existingBook.getId().equals(id)
+                )
                 .ifPresent(existingBook -> {
                     throw new IsbnAlreadyExistsException(request.getIsbn());
                 });
